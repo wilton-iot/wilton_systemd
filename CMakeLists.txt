@@ -20,12 +20,14 @@ project ( wilton_systemd CXX )
 set ( ${PROJECT_NAME}_DEPS
         staticlib_json
         staticlib_utils
-        systemd )
+        libsystemd )
         
 staticlib_pkg_check_modules ( ${PROJECT_NAME}_DEPS_PC REQUIRED ${PROJECT_NAME}_DEPS )
 
-# executable
-add_executable ( ${PROJECT_NAME}
+message ( STATUS ${${PROJECT_NAME}_DEPS_PC_LIBRARIES} )
+
+# library
+add_library ( ${PROJECT_NAME} SHARED
         ${CMAKE_CURRENT_LIST_DIR}/src/wiltoncall_systemd.cpp )
         
 target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
@@ -46,6 +48,6 @@ staticlib_extract_debuginfo_shared ( ${PROJECT_NAME} )
 # pkg-config
 set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_LIST_DIR}/include" )
 set ( ${PROJECT_NAME}_PC_LIBS "-L${CMAKE_LIBRARY_OUTPUT_DIRECTORY} -l${PROJECT_NAME}" )
-staticlib_list_to_string ( ${PROJECT_NAME}_PC_REQUIRES_PRIVATE "" ${PROJECT_NAME}_DEPS )
+staticlib_list_to_string ( ${PROJECT_NAME}_PC_REQUIRES "" ${PROJECT_NAME}_DEPS )
 configure_file ( ${WILTON_DIR}/resources/buildres/pkg-config.in 
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/${PROJECT_NAME}.pc )

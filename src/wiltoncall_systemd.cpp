@@ -26,7 +26,7 @@
 #include <vector>
 
 #include <sys/types.h>
-#include <systemd/sd-daemon.h
+#include <systemd/sd-daemon.h>
 
 #include "staticlib/io.hpp"
 #include "staticlib/json.hpp"
@@ -62,7 +62,7 @@ support::buffer notify(sl::io::span<const char> data) {
     if (rstate.get().empty()) throw support::exception(TRACEMSG(
             "Required parameter 'state' not specified"));
     const std::string& state = rstate.get();
-    auto pid = sl::utils::current_pid();
+    auto pid = sl::utils::current_process_pid();
 
     // call
     wilton::support::log_debug(logger, std::string("Is due to notify systemd,") +
