@@ -29,11 +29,23 @@ add_executable ( ${PROJECT_NAME}
         ${CMAKE_CURRENT_LIST_DIR}/src/wiltoncall_systemd.cpp )
         
 target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/include
         ${WILTON_DIR}/core/include
+        ${WILTON_DIR}/modules/wilton_logging/include
         ${${PROJECT_NAME}_DEPS_PC_INCLUDE_DIRS} )
         
 target_link_libraries ( ${PROJECT_NAME} PRIVATE
         wilton_core
         wilton_logging
         ${${PROJECT_NAME}_DEPS_PC_LIBRARIES} )
+
+target_compile_options ( ${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_DEPS_PC_CFLAGS_OTHER} )
+
+# debuginfo
+staticlib_extract_debuginfo_shared ( ${PROJECT_NAME} )
+
+# pkg-config
+set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_LIST_DIR}/include" )
+set ( ${PROJECT_NAME}_PC_LIBS "-L${CMAKE_LIBRARY_OUTPUT_DIRECTORY} -l${PROJECT_NAME}" )
+staticlib_list_to_string ( ${PROJECT_NAME}_PC_REQUIRES_PRIVATE "" ${PROJECT_NAME}_DEPS )
+configure_file ( ${WILTON_DIR}/resources/buildres/pkg-config.in 
+        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/${PROJECT_NAME}.pc )
