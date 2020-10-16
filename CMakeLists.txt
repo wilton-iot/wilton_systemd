@@ -24,8 +24,6 @@ set ( ${PROJECT_NAME}_DEPS
         
 staticlib_pkg_check_modules ( ${PROJECT_NAME}_DEPS_PC REQUIRED ${PROJECT_NAME}_DEPS )
 
-message ( STATUS ${${PROJECT_NAME}_DEPS_PC_LIBRARIES} )
-
 # library
 add_library ( ${PROJECT_NAME} SHARED
         ${CMAKE_CURRENT_LIST_DIR}/src/wiltoncall_systemd.cpp )
